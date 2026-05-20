@@ -10,6 +10,8 @@ const decode = (str) => Buffer.from(str, 'base64').toString();
 const app = express();
 app.use(cors());
 
+
+
 app.get('/', (req, res) => {
   res.send("Socket.IO server is up and running 🚀");
 });
