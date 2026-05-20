@@ -40,3 +40,111 @@
     transform: rotate(360deg);
   }
 }
+
+/* Responsive utilities */
+@layer utilities {
+  /* Mobile-first responsive text sizing */
+  @media (max-width: 640px) {
+    .responsive-text-lg {
+      @apply text-base;
+    }
+    .responsive-text-xl {
+      @apply text-lg;
+    }
+    .responsive-text-2xl {
+      @apply text-xl;
+    }
+  }
+
+  @media (min-width: 641px) {
+    .responsive-text-lg {
+      @apply text-lg;
+    }
+    .responsive-text-xl {
+      @apply text-xl;
+    }
+    .responsive-text-2xl {
+      @apply text-2xl;
+    }
+  }
+
+  /* Responsive spacing */
+  .responsive-px {
+    @apply px-4 md:px-6 lg:px-8;
+  }
+
+  .responsive-py {
+    @apply py-4 md:py-6 lg:py-8;
+  }
+
+  /* Responsive widths */
+  .responsive-container {
+    @apply w-full max-w-full md:max-w-2xl lg:max-w-4xl;
+  }
+
+  /* Touch-friendly buttons */
+  .touch-button {
+    @apply min-h-10 min-w-10;
+  }
+
+  /* Better mobile scrolling */
+  .mobile-scroll {
+    @apply overflow-y-auto overflow-x-hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+
+  body {
+    font-size: 14px;
+  }
+
+  /* Ensure inputs are at least 16px to avoid zoom on focus on iOS */
+  input, textarea, select {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Stack layouts vertically on mobile */
+  .flex-responsive {
+    @apply flex-col;
+  }
+
+  /* Reduce padding on mobile */
+  .padding-responsive {
+    @apply p-2;
+  }
+
+  /* Make buttons taller for easier touch on mobile */
+  .button-responsive {
+    @apply py-2 px-3 text-sm;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  /* Tablet optimizations */
+  .flex-responsive {
+    @apply flex-row;
+  }
+
+  .padding-responsive {
+    @apply p-3;
+  }
+}
+
+@media (min-width: 1025px) {
+  /* Desktop optimizations */
+  .flex-responsive {
+    @apply flex-row;
+  }
+
+  .padding-responsive {
+    @apply p-4;
+  }
+}

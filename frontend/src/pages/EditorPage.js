@@ -13,6 +13,8 @@ function EditorPage() {
   const username = location.state?.username;
   const [currentLine, setCurrentLine] = useState(null);
   const [members, setMembers] = useState([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
 
   useEffect(() => {
     if (!username) {
@@ -141,10 +143,29 @@ function EditorPage() {
   };
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden">
+    <div className="flex flex-col lg:flex-row h-screen w-screen overflow-hidden bg-gray-900">
+      {/* Mobile Menu Buttons */}
+      <div className="lg:hidden flex items-center justify-between bg-gray-800 p-2 border-b border-gray-700">
+        <img src="/logoNew2.png" alt="Logo" className="h-8" />
+        <div className="flex gap-2">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="px-3 py-1 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-500"
+          >
+            {sidebarOpen ? '✕ Panel' : '☰ Panel'}
+          </button>
+          <button
+            onClick={() => setChatOpen(!chatOpen)}
+            className="px-3 py-1 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-500"
+          >
+            {chatOpen ? '✕ Chat' : '💬 Chat'}
+          </button>
+        </div>
+      </div>
+
       {/* Sidebar */}
-      <div className="w-64 bg-gray-900 text-white p-4 flex flex-col overflow-y-auto no-scrollbar">
-        <div className="mb-8 pb-4 border-b border-gray-300">
+      <div className={`${sidebarOpen ? 'block' : 'hidden'} lg:block lg:w-64 w-full bg-gray-900 text-white p-4 flex flex-col overflow-y-auto no-scrollbar border-r border-gray-700 lg:border-b-0 border-b`}>
+        <div className="mb-8 pb-4 border-b border-gray-300 hidden lg:block">
           <img src="/logoNew2.png" alt="Logo" className="h-10 mx-auto" />
         </div>
 
@@ -157,29 +178,32 @@ function EditorPage() {
           </div>
         </div>
 
-        <button
-          onClick={handleCopyRoomId}
-          className="w-full rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-indigo-500 mb-2"
-        >
-          Copy Room ID
-        </button>
-        <button
-          onClick={handleSaveCodeFile}
-          className="w-full rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-indigo-500 mb-2"
-        >
-          Save Code File
-        </button>
-        <button
-          onClick={handleLeaveRoom}
-          className="w-full rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-indigo-500 mb-2"
-        >
-          Leave Room
-        </button>
+        <div className="space-y-2">
+          <button
+            onClick={handleCopyRoomId}
+            className="w-full rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-indigo-500"
+          >
+            Copy Room ID
+          </button>
+          <button
+            onClick={handleSaveCodeFile}
+            className="w-full rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-indigo-500"
+          >
+            Save Code File
+          </button>
+          <button
+            onClick={handleLeaveRoom}
+            className="w-full rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-red-500"
+          >
+            Leave Room
+          </button>
+        </div>
 
         <div className="mt-4">
+          <p className="text-sm font-semibold mb-2">Input (stdin)</p>
           <textarea
             placeholder="Input (stdin)..."
-            className="w-full h-24 p-2 rounded bg-gray-800 text-white mb-2 resize-none no-scrollbar"
+            className="w-full h-20 lg:h-24 p-2 rounded bg-gray-800 text-white mb-2 resize-none no-scrollbar text-sm"
             value={input}
             onChange={(e) => {
               setInput(e.target.value);
@@ -188,30 +212,36 @@ function EditorPage() {
           />
           <button
             onClick={handleRunCode}
-            className="w-full rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-indigo-500 mb-2"
+            className="w-full rounded-md bg-green-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-green-500 mb-2"
           >
             Run / Compile Code
           </button>
-          <pre className="bg-black text-green-400 p-2 rounded h-48 overflow-auto no-scrollbar whitespace-pre-wrap">
+          <p className="text-sm font-semibold mb-2">Output</p>
+          <pre className="bg-black text-green-400 p-2 rounded h-32 lg:h-48 overflow-auto no-scrollbar whitespace-pre-wrap text-xs">
             {output}
           </pre>
         </div>
       </div>
 
-      {/* Editor Area */}
-      <div className="flex-1 h-full overflow-auto bg-gray-100 no-scrollbar">
-        <div className="h-full w-full min-w-[1000px] overflow-auto no-scrollbar">
-          <Editor
-            roomId={roomId}
-            username={username}
-            onCodeChange={setCode}
-            onCurrentLineChange={setCurrentLine}
-          />
+      {/* Main Content */}
+      <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
+        {/* Editor Area */}
+        <div className="flex-1 h-1/2 lg:h-full overflow-auto bg-gray-100 no-scrollbar">
+          <div className="h-full w-full overflow-auto no-scrollbar">
+            <Editor
+              roomId={roomId}
+              username={username}
+              onCodeChange={setCode}
+              onCurrentLineChange={setCurrentLine}
+            />
+          </div>
+        </div>
+
+        {/* Chat */}
+        <div className={`${chatOpen ? 'block' : 'hidden'} lg:block lg:w-80 w-full h-1/2 lg:h-full border-t lg:border-t-0 lg:border-l border-gray-700`}>
+          <Chat roomId={roomId} username={username} />
         </div>
       </div>
-
-      {/* Chat */}
-      <Chat roomId={roomId} username={username} />
     </div>
   );
 }
