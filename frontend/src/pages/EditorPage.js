@@ -90,7 +90,7 @@ function EditorPage() {
     const languageId = 54;
 
     try {
-      const response = await fetch("https://codealong-0dka.onrender.com/run", {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/run`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
